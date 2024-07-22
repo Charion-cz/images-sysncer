@@ -21,7 +21,7 @@ jobs:
       uses: docker/login-action@v2.2.0
       with:
         registry: registry.cn-hangzhou.aliyuncs.com/lyarmor/lyarmor
-        username: 17717589062
+        username: 17771589062
         password: youyaoqi0.1
         logout: false
         
