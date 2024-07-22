@@ -32,7 +32,7 @@ jobs:
           echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
 
       - name: 读取文件内容
-        if: contains(env.CHANGED_FILES, 'image.txt')
+        if: contains(env.CHANGED_FILES, 'imageFile')
         id: read_image_file
         run: |
           IMAGE=$(awk 'NF' image.txt | tail -n 1)
