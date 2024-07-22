@@ -1,8 +1,7 @@
-# 工作流名称
-name: Sync-Images-to-DockerHub
-# 工作流运行时显示名称
-run-name: ${{ github.actor }} is Sync Images to DockerHub.
-# 怎样触发工作流
+# 将镜像同步至个人阿里云仓库
+name: Sync-Images
+run-name: ${{ github.actor }} is Sync Images to personal imageHub.
+
 on:
   push:
     branches: ['main']
@@ -12,12 +11,36 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# 工作流程任务（通常含有一个或多个步骤）
+# 工作流程任务
 jobs:
   syncimages:
     runs-on: ubuntu-latest
     steps:
-      - name: Login to Docker Hub
+      - name: 检出代码库
+        uses: actions/checkout@v2
+
+      - name: pick up latest imageName
+        id: changes
+        run: |
+          FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
+
+      - name: pick up latest imageName
+        id: changes
+        run: |
+          FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
+
+      - name: 读取文件内容
+        if: contains(env.CHANGED_FILES, 'image.txt')
+        id: read_image_file
+        run: |
+          IMAGE=$(awk 'NF' image.txt | tail -n 1)
+          IMAGE_NAME=$(echo $IMAGE | awk -F/ '{print $NF}')
+          echo "ORIGIN_DOCKER_IMAGE=$IMAGE" >> $GITHUB_ENV
+          echo "MY_DOCKER_IMAGE=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Login to Aliyun Repo
         uses: Charion-cz/images-sysncer@v1
         with:
           registry: ${{ secrets.REPO_URL }}
@@ -28,4 +51,4 @@ jobs:
       - name: Use Skopeo Tools Sync Image to Docker Hub
         run: |
           #!/usr/bin/env bash
-          skopeo copy docker://docker.io/xiaoyaliu/alist:latest docker://${{ secrets.REPO_URL }}/lyarmor/alist:latest
+          skopeo copy docker://docker.io/${{ env.IMAGE }} docker://${{ secrets.REPO_URL }}/lyarmor/${{ env.IMAGE_NAME }}
