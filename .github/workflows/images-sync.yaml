@@ -14,8 +14,8 @@ jobs:
   syncimages:
     runs-on: ubuntu-latest
     steps:
-      # - name: 检出代码库
-      #   uses: actions/checkout@v2
+      - name: 检出代码库
+        uses: actions/checkout@v2
 
       # - name: pick up latest imageName
       #   id: changes
