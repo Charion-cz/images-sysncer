@@ -16,6 +16,9 @@ jobs:
   syncimages:
     runs-on: ubuntu-latest
     steps:
+      - name: 检出代码库
+        uses: actions/checkout@v2
+
       - name: pick up latest imageName
         id: changes
         run: |
@@ -26,7 +29,7 @@ jobs:
         if: contains(env.CHANGED_FILES, 'imageFile')
         id: read_image_file
         run: |
-          IMAGE=$(awk 'NF' image.txt | tail -n 1)
+          IMAGE=$(awk 'NF' imageFile | tail -n 1)
           IMAGE_NAME=$(echo $IMAGE | awk -F/ '{print $NF}')
           echo "ORIGIN_DOCKER_IMAGE=$IMAGE" >> $GITHUB_ENV
           echo "MY_DOCKER_IMAGE=$IMAGE_NAME" >> $GITHUB_ENV
