@@ -22,12 +22,6 @@ jobs:
           FILES=$(git diff --name-only HEAD^ HEAD)
           echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
 
-      - name: pick up latest imageName
-        id: changes
-        run: |
-          FILES=$(git diff --name-only HEAD^ HEAD)
-          echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
-
       - name: 读取文件内容
         if: contains(env.CHANGED_FILES, 'imageFile')
         id: read_image_file
