@@ -22,8 +22,10 @@ jobs:
         id: changes
         run: |
           FILES=$(git show --name-only --pretty=format: HEAD)
+          # Replace newline characters with a placeholder
+          FILES_ESCAPED=$(echo "$FILES" | tr '\n' '\\n')
           echo "FILES: $FILES"
-          echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
+          echo "CHANGED_FILES=$FILES_ESCAPED" >> $GITHUB_ENV
 
       - name: read file
         if: contains(env.CHANGED_FILES, 'imageFile')
