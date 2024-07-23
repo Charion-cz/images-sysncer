@@ -1,2 +1,3 @@
 nginx:latest
 archlinux:latest
+nacos/nacos-server:v2.3.0-slim
