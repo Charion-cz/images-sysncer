@@ -4,8 +4,9 @@ run-name: ${{ github.actor }} is Sync Images to personal imageHub.
 
 on:
   push:
-    tags:
-      - '*'
+    branches: ['main']
+  pull_request:
+    branches: ['main']
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -14,29 +15,23 @@ jobs:
   syncimages:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码库
+      - name: checkout
         uses: actions/checkout@v2
 
-      # - name: pick up latest imageName
-      #   id: changes
-      #   run: |
-      #     FILES=$(git diff --name-only HEAD^ HEAD)
-      #     echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
+      - name: pick up latest imageName
+        id: changes
+        run: |
+          FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
 
-      # - name: 读取文件内容
-      #   if: contains(env.CHANGED_FILES, 'imageFile')
-      #   id: read_image_file
-      #   run: |
-      #     IMAGE=$(awk 'NF' imageFile | tail -n 1)
-      #     IMAGE_NAME=$(echo $IMAGE | awk -F/ '{print $NF}')
-      #     echo "ORIGIN_DOCKER_IMAGE=$IMAGE" >> $GITHUB_ENV
-      #     echo "MY_DOCKER_IMAGE=$IMAGE_NAME" >> $GITHUB_ENV
-      - name: 获取标签名称
-        id: get_tag
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-      - name: 打印标签名称
-        run: echo "The tag name is ${{ env.TAG_NAME }}"
+      - name: read file
+        if: contains(env.CHANGED_FILES, 'imageFile')
+        id: read_image_file
+        run: |
+          IMAGE=$(awk 'NF' imageFile | tail -n 1)
+          IMAGE_NAME=$(echo $IMAGE | awk -F/ '{print $NF}')
+          echo "ORIGIN_DOCKER_IMAGE=$IMAGE" >> $GITHUB_ENV
+          echo "MY_DOCKER_IMAGE=$IMAGE_NAME" >> $GITHUB_ENV
 
       - name: Login to Aliyun Repo
         uses: Charion-cz/images-sysncer@v1
@@ -49,4 +44,4 @@ jobs:
       - name: Use Skopeo Tools Sync Image to Docker Hub
         run: |
           #!/usr/bin/env bash
-          skopeo copy docker://docker.io/${{ env.TAG_NAME }} docker://${{ secrets.REPO_URL }}/lyarmor/${{ env.TAG_NAME }}
+          skopeo copy docker://docker.io/${{ env.ORIGIN_DOCKER_IMAGE }} docker://${{ secrets.REPO_URL }}/lyarmor/${{ env.MY_DOCKER_IMAGE }}
