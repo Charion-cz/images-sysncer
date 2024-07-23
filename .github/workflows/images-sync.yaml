@@ -21,7 +21,7 @@ jobs:
       - name: pick up latest imageName
         id: changes
         run: |
-          FILES=$(git diff --name-only HEAD^ HEAD)
+          FILES=$(git show --name-only --pretty=format: HEAD)
           echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
 
       - name: read file
