@@ -22,6 +22,7 @@ jobs:
         id: changes
         run: |
           FILES=$(git show --name-only --pretty=format: HEAD)
+          echo "FILES: $FILES"
           echo "CHANGED_FILES=$FILES" >> $GITHUB_ENV
 
       - name: read file
