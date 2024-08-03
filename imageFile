@@ -1,6 +1,1 @@
-nginx:latest
-archlinux:latest
-nacos/nacos-server:v2.3.0-slim
-apache/rocketmq:5.2.0
-redis:6.2
-mongo:4.4.0
+open-webui/open-webui:main
