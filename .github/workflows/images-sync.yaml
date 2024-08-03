@@ -4,9 +4,9 @@ run-name: ${{ github.actor }} is Sync Images to personal imageHub.
 
 on:
   push:
-    branches: ['main']
+    branches: ['ghcr']
   pull_request:
-    branches: ['main']
+    branches: ['ghcr']
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -47,4 +47,4 @@ jobs:
       - name: Use Skopeo Tools Sync Image to Aliyun Hub
         run: |
           #!/usr/bin/env bash
-          skopeo copy docker://docker.io/${{ env.ORIGIN_DOCKER_IMAGE }} docker://${{ secrets.REPO_URL }}/lyarmor/${{ env.MY_DOCKER_IMAGE }}
+          skopeo copy ghcr://ghcr.io/${{ env.ORIGIN_DOCKER_IMAGE }} docker://${{ secrets.REPO_URL }}/lyarmor/${{ env.MY_DOCKER_IMAGE }}
