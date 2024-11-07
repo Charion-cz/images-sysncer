@@ -7,3 +7,4 @@ mongo:4.4.0
 ollama/ollama:latest
 mysql:8.0
 dickhub/docker-osx:ventura
+sickcodes/docker-osx:latest
