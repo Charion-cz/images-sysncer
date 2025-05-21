@@ -10,3 +10,4 @@ dickhub/docker-osx:ventura
 sickcodes/docker-osx:latest
 archlinux:base
 archlinux:latest
+archlinux:base
